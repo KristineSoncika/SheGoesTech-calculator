@@ -26,7 +26,7 @@ body {
   gap: 6px;
 }
 
-.calc {
+.screen {
   grid-area: calc;
   height: 100%;
   width: 100%;
@@ -87,11 +87,6 @@ button:hover {
 }
 
 .active-btn {
-  margin: 2px;
-  background: rgb(212, 209, 209);
-}
-
-.active-minusplus {
   margin: 2px;
   background: rgb(212, 209, 209);
 }

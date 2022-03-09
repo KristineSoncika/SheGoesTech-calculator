@@ -1,72 +1,113 @@
 $(() => {
   let num1 = "";
   let num2 = "";
-  let oper = "";
-  let total = 0;
+  let operator = "";
+  let total;
 
-  const number = (num) => {
+  // the first number is stored in num1; the second in num2
+
+  const numbers = (num) => {
     if (num1 === "") {
       num1 = num;
+      console.log("num1: " + num1);
     } else {
       num2 = num;
+      console.log("num2: " + num2);
     }
-    displayBtn(num);
   };
 
-  const operator = (op) => {
-    if (oper === "") {
-      oper = op;
+  // operator clicked is stored in operator; once the second operator is clicked, the total is calculated and stored in total
+  const operators = (op) => {
+    if (operator === "") {
+      operator = op;
+      console.log(operator);
     } else {
-      tot();
-      oper = op;
+      result();
+      operator = op;
+      console.log(operator);
     }
   };
 
-  const displayBtn = (btn) => {
-    $(".calc").text(btn);
+  // after total is stored in num1, and next number clicked in num2
+  const updateNums = () => {
+    num1 = total;
+    num2 = "";
   };
 
-  const tot = () => {
-    switch (oper) {
+  // calculations
+  const result = () => {
+    switch (operator) {
       case "+":
         total = +num1 + +num2;
-        displayBtn(total);
+        displayContent(total);
         break;
       case "-":
         total = +num1 - +num2;
-        displayBtn(total);
+        displayContent(total);
         break;
       case "/":
         total = +num1 / +num2;
-        displayBtn(total);
+        displayContent(total);
         break;
       case "x":
         total = +num1 * +num2;
-        displayBtn(total);
+        displayContent(total);
         break;
     }
+    console.log(total);
+    console.log("num11: " + num1);
+
+    updateNums();
+    console.log(total);
+    console.log("num111: " + num1);
   };
 
+  // what gets displayed on the calculator screen
+  const displayContent = (btn) => {
+    $(".screen").html(btn);
+  };
+
+  //
+  let value = "";
   $("button").on("click", (event) => {
-    let btn = $(event.target).html();
-    console.log(btn);
+    let btn = $(event.currentTarget).html();
     if (btn >= "0" && btn <= "9") {
-      number(btn);
+      value += btn;
+      displayContent(value);
     } else {
-      operator(btn);
+      numbers(value);
+      value = "";
+    }
+
+    if (
+      btn === "+" ||
+      btn === "-" ||
+      btn === "/" ||
+      btn === "x" ||
+      btn === "="
+    ) {
+      operators(btn);
     }
   });
 
+  const equals = () => {
+    num1 = "";
+    operator = "";
+    value = "";
+    total = 0;
+  };
+
+  // clear content and calculations
   const clear = () => {
     num1 = "";
     num2 = "";
-    oper = "";
+    operator = "";
+    value = "";
     total = 0;
-    $(".calc").text("");
+    displayContent("");
   };
 
   $(".content").on("click", (event) => {
-    $(".calc").html();
     $(event.currentTarget).addClass("active-btn");
     $(event.currentTarget).siblings().removeClass("active-btn");
     $(event.currentTarget).siblings().removeClass("active-main");
@@ -81,9 +122,6 @@ $(() => {
     $(event.currentTarget).siblings().removeClass("active-other");
     $(event.currentTarget).siblings().removeClass("active-minusplus");
     $(event.currentTarget).siblings().removeClass("active-clear");
-  });
-  $(".equals").on("click", () => {
-    tot();
   });
   $(".other-oper").on("click", (event) => {
     $(event.currentTarget).addClass("active-other");
@@ -100,13 +138,5 @@ $(() => {
     $(event.currentTarget).siblings().removeClass("active-main");
     $(event.currentTarget).siblings().removeClass("active-other");
     $(event.currentTarget).siblings().removeClass("active-minusplus");
-  });
-  $(".minus-plus").on("click", (event) => {
-    $(event.currentTarget).addClass("active-minusplus");
-    $(event.currentTarget).siblings().removeClass("active-btn");
-    $(event.currentTarget).siblings().removeClass("active-main");
-    $(event.currentTarget).siblings().removeClass("active-other");
-    $(event.currentTarget).siblings().removeClass("active-minusplus");
-    $(event.currentTarget).siblings().removeClass("active-clear");
   });
 });
