@@ -2,17 +2,15 @@ $(() => {
   let num1 = "";
   let num2 = "";
   let operator = "";
-  let total;
+  let total = 0;
 
   // the first number is stored in num1; the second in num2
 
   const numbers = (num) => {
     if (num1 === "") {
       num1 = num;
-      console.log("num1: " + num1);
     } else {
       num2 = num;
-      console.log("num2: " + num2);
     }
   };
 
@@ -20,46 +18,72 @@ $(() => {
   const operators = (op) => {
     if (operator === "") {
       operator = op;
-      console.log(operator);
     } else {
       result();
       operator = op;
-      console.log(operator);
     }
   };
 
   // after total is stored in num1, and next number clicked in num2
   const updateNums = () => {
-    num1 = total;
+    num1 = total.toString();
     num2 = "";
   };
 
-  // calculations
+  // calculations based on the operator clicked (requires to numbers)
   const result = () => {
     switch (operator) {
       case "+":
         total = +num1 + +num2;
+        total = maxTenDec(total);
         displayContent(total);
         break;
       case "-":
         total = +num1 - +num2;
+        total = maxTenDec(total);
         displayContent(total);
         break;
       case "/":
         total = +num1 / +num2;
+        total = maxTenDec(total);
         displayContent(total);
         break;
       case "x":
         total = +num1 * +num2;
+        total = maxTenDec(total);
         displayContent(total);
         break;
     }
-    console.log(total);
-    console.log("num11: " + num1);
-
     updateNums();
-    console.log(total);
-    console.log("num111: " + num1);
+  };
+
+  // calculations based on the operator clicked (requires one number)
+  const otherOperators = (op) => {
+    if (op === "R2") {
+      total = parseInt((+num1).toFixed(2));
+      displayContent(total);
+    } else if (op === "R0") {
+      total = Math.ceil(+num1);
+      displayContent(total);
+    } else if (op === "%") {
+      total = +num1 / 100;
+      total = maxTenDec(total);
+      displayContent(total);
+    } else if (op === "x²") {
+      total = (+num1) ** 2;
+      total = maxTenDec(total);
+      displayContent(total);
+    } else if (op === "√x") {
+      total = (+num1) ** 0.5;
+      total = maxTenDec(total);
+      displayContent(total);
+    } else if (op === "+/-") {
+      total = +num1 * -1;
+      total = maxTenDec(total);
+      displayContent(total);
+    }
+    updateNums();
+    return total;
   };
 
   // what gets displayed on the calculator screen
@@ -67,11 +91,14 @@ $(() => {
     $(".screen").html(btn);
   };
 
-  //
+  // adds numbers and operators to a calculation based on buttons clicked
   let value = "";
   $("button").on("click", (event) => {
     let btn = $(event.currentTarget).html();
     if (btn >= "0" && btn <= "9") {
+      value += btn;
+      displayContent(value);
+    } else if (btn === "." && !value.includes(".")) {
       value += btn;
       displayContent(value);
     } else {
@@ -88,14 +115,18 @@ $(() => {
     ) {
       operators(btn);
     }
-  });
 
-  const equals = () => {
-    num1 = "";
-    operator = "";
-    value = "";
-    total = 0;
-  };
+    if (
+      btn === "R2" ||
+      btn === "R0" ||
+      btn === "%" ||
+      btn === "x²" ||
+      btn === "√x" ||
+      btn === "+/-"
+    ) {
+      otherOperators(btn);
+    }
+  });
 
   // clear content and calculations
   const clear = () => {
@@ -105,6 +136,30 @@ $(() => {
     value = "";
     total = 0;
     displayContent("");
+  };
+
+  // sets max of 10 decimals after comma (but removes trailing zeros if any)
+  const maxTenDec = (num) => {
+    if (!Number.isInteger(num)) {
+      num = parseFloat(num.toFixed(10));
+    }
+    if ((!Number.isInteger(num) && num > 10) || num < -10) {
+      $(".screen").css("font-size", "3.3rem");
+    }
+    if ((!Number.isInteger(num) && num > 100) || num < -100) {
+      $(".screen").css("font-size", "3.1rem");
+    }
+    if ((!Number.isInteger(num) && num > 1000) || num < -1000) {
+      $(".screen").css("font-size", "2.9rem");
+    }
+    if ((!Number.isInteger(num) && num > 10000) || num < -10000) {
+      $(".screen").css("font-size", "2.7rem");
+    }
+    if ((!Number.isInteger(num) && num > 100000) || num < -100000) {
+      num = parseFloat(num.toFixed(9));
+      $(".screen").css("font-size", "2.5rem");
+    }
+    return num;
   };
 
   $(".content").on("click", (event) => {
