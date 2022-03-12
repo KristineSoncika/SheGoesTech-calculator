@@ -164,6 +164,8 @@ $(() => {
     value = "";
     total = 0;
     displayContent("");
+    $(".screen").css("text-align", "right");
+    $(".screen-frame").css("justify-content", "right");
   };
 
   // add custom number format
