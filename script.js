@@ -156,18 +156,6 @@ $(() => {
     }
   });
 
-  // clear content and calculations
-  const clear = () => {
-    num1 = "";
-    num2 = "";
-    operator = "";
-    value = "";
-    total = 0;
-    displayContent("");
-    $(".screen").css("text-align", "right");
-    $(".screen-frame").css("justify-content", "right");
-  };
-
   // add custom number format
   const numberFormat = (num) => {
     // create array of two substrings split by '.'
@@ -222,6 +210,19 @@ $(() => {
       $(".screen-frame").css("justify-content", "left");
     }
     return num;
+  };
+
+  // clear content and calculations
+  const clear = () => {
+    num1 = "";
+    num2 = "";
+    operator = "";
+    value = "";
+    total = 0;
+    displayContent("");
+    $(".screen").css("text-align", "right");
+    $(".screen-frame").css("justify-content", "right");
+    $(".screen").css("font-size", "3.4rem");
   };
 
   // active buttons
