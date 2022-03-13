@@ -163,7 +163,14 @@ $(() => {
     // insert space to 4th last position of the string
     num[0] = num[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     // return the whole string
-    return (num = num.join("."));
+    num = num.join(".");
+    console.log(num);
+    // cuts the string at 16 characters
+    if (num.length > 16) {
+      num = num.slice(0, 16);
+      console.log(num);
+    }
+    return num;
   };
 
   // turn into number after the string is formatted
@@ -180,34 +187,7 @@ $(() => {
   // set max of 10 decimals after comma (but removes trailing zeros if any)
   const maxTenDec = (num) => {
     if (!Number.isInteger(num)) {
-      num = parseFloat(num.toFixed(10));
-    }
-    if ((!Number.isInteger(num) && num > 10) || num < -10) {
-      $(".screen").css("font-size", "3.2rem");
-    }
-    if ((!Number.isInteger(num) && num > 100) || num < -100) {
-      $(".screen").css("font-size", "3.0rem");
-    }
-    if ((!Number.isInteger(num) && num > 1000) || num < -1000) {
-      $(".screen").css("font-size", "2.8rem");
-    }
-    if ((!Number.isInteger(num) && num > 10000) || num < -10000) {
-      $(".screen").css("font-size", "2.6rem");
-    }
-    if ((!Number.isInteger(num) && num > 100000) || num < -100000) {
-      $(".screen").css("font-size", "2.5rem");
-    }
-    if ((!Number.isInteger(num) && num > 1000000) || num < -1000000) {
-      num = parseFloat(num.toFixed(4));
-      $(".screen").css("font-size", "2.4rem");
-    }
-    if (
-      (!Number.isInteger(num) && num > 1000000000000) ||
-      num < -1000000000000
-    ) {
-      num = parseFloat(num.toFixed(2));
-      $(".screen").css("text-align", "left");
-      $(".screen-frame").css("justify-content", "left");
+      num = parseFloat(num.toFixed(6));
     }
     return num;
   };
@@ -220,9 +200,7 @@ $(() => {
     value = "";
     total = 0;
     displayContent("");
-    $(".screen").css("text-align", "right");
-    $(".screen-frame").css("justify-content", "right");
-    $(".screen").css("font-size", "3.4rem");
+    $(".screen").css("font-size", "3rem");
   };
 
   // active buttons
