@@ -50,10 +50,10 @@ $(() => {
       case "/":
         total = +num1 / +num2;
         total = maxTenDec(total);
+        total = error(total);
         total = numberFormat(total);
         displayContent(total);
         total = turnIntoNumber(total);
-        error();
         break;
       case "x":
         total = +num1 * +num2;
@@ -67,11 +67,13 @@ $(() => {
   };
 
   // if divided by zero, show error
-  const error = () => {
+  const error = (total) => {
     if (total === Infinity) {
-      return $(".screen").html("Error");
+      return (total = "Error");
     }
   };
+
+  // console.log(error("Infinity"));
 
   // calculations based on the operator clicked (requires one number)
   const otherOperators = (op) => {
@@ -99,10 +101,15 @@ $(() => {
       total = turnIntoNumber(total);
     } else if (op === "√x") {
       total = (+num1) ** 0.5;
-      total = maxTenDec(total);
-      total = numberFormat(total);
-      displayContent(total);
-      total = turnIntoNumber(total);
+      if (isNaN(total)) {
+        total = "Error";
+        displayContent(total);
+      } else {
+        total = maxTenDec(total);
+        total = numberFormat(total);
+        displayContent(total);
+        total = turnIntoNumber(total);
+      }
     } else if (op === "+/-") {
       total = +num1 * -1;
       total = maxTenDec(total);
@@ -164,11 +171,9 @@ $(() => {
     num[0] = num[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     // return the whole string
     num = num.join(".");
-    console.log(num);
     // cuts the string at 16 characters
     if (num.length > 16) {
       num = num.slice(0, 16);
-      console.log(num);
     }
     return num;
   };
